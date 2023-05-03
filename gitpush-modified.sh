@@ -50,8 +50,9 @@ fi
 
 # Check for modified files and folders
 read -p "Enter remote repository URL:" github_remoterepo
+git remote rm origin
 git remote add origin "$github_remoterepo"
-git pull "$github_remoterepo"
+git pull "$github_remoterepo" "$branch_name"
 
 modified_files=$(git status --porcelain)
 
@@ -80,4 +81,9 @@ git commit -m "$commit_message"
 
 # Push the changes to GitHub
 git push origin $branch_name
-echo "Changes pushed to GitHub."
+if [[ $? == 0 ]]
+then
+	echo "Changes pushed to GitHub."
+	exit 1
+fi
+echo 'Push is failed'
