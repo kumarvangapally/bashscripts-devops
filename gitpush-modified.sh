@@ -40,8 +40,6 @@ if ! git rev-parse --is-inside-work-tree &> /dev/null; then
     read -p "This directory is not a git repository. Do you want to initialize it? (y/n): " confirm_init
     if [[ "$confirm_init" == "y" ]]; then
         git init
-	read -p "Enter the branch name of remote repository: " branch_name    
-	git branch -m $branch_name
     else
         echo "Aborting push. This directory is not a git repository."
         exit 1
@@ -52,6 +50,12 @@ fi
 read -p "Enter remote repository URL:" github_remoterepo
 git remote rm origin
 git remote add origin "$github_remoterepo"
+
+# Adding the branch name to push and pull data from repo
+read -p "Enter the branch name of remote repository: " branch_name    
+git branch -m $branch_name
+
+# Pull the data to sync local and remote files
 git pull "$github_remoterepo" "$branch_name"
 
 modified_files=$(git status --porcelain)
